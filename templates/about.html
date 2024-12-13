@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>AGHASYEDI - Voyage</title>
+  <meta name="description" content="Web designer and front-end developer">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+  <link href='https://fonts.googleapis.com/css?family=Raleway:100,200,400,600' rel='stylesheet' type='text/css'>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.4/jquery.fullPage.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css'>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<body>
+  <!-- navbar header -->
+  <div class="nav-header">
+    <div class="nav-brand">
+      <img src="https://img.lovepik.com/png/20230929/green-logo-material-creative-logo-trees-environmental-logo_24185_wh1200.png">
+    </div>
+    <i class="fa fa-bars fa-3x"></i>
+    <div class="header-links">
+      <ul>
+        <li data-menuanchor="fourthPage"><a href="#contact">CONTACT</a></li>
+        <li data-menuanchor="thirdPage"><a href="#portfolio">PORTFOLIO</a></li>
+        <li data-menuanchor="secondPage"><a href="#about">ABOUT</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- end navbar header -->
+
+  <!-- sidebar slider -->
+  <div class="nav-screen">
+    <i class="fa fa-times fa-3x"></i>
+    <div class="nav-container">
+      <div class="nav-links">
+        <ul id='myMenu'>
+          <li data-menuanchor="secondPage"><a href="#about">ABOUT</a></li>
+          <li data-menuanchor="thirdPage"><a href="#portfolio">PORTFOLIO</a></li>
+          <li data-menuanchor="fourthPage"><a href="#contact">CONTACT</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- end navbar slider -->
+
+  <!-- begin fullpage -->
+
+  <div id="fullpage">
+
+    <!-- begin section -->
+
+    <div class="section aboutme" data-anchor="aboutme">
+      <div class="opaque-bg animated fadeInDown">
+        <h1 style="color:white">AGHA<span style="color:green">/</span>SYEDI</h1>
+        <p><span id="holder"></span><span class="blinking-cursor">|</span></p>
+      </div>
+      <i id="moveDown" class="fa fa-chevron-down fa-3x bounce"></i>
+    </div>
+    <!-- end section -->
+
+    <!-- begin section -->
+
+    <div class="section" data-anchor="skills">
+      <div class="content">
+        <h1 class="wow fadeInDown" data-wow-delay="0.2s">ABOUT ME</h1>
+        <p class="wow fadeInDown" data-wow-delay="0.2s">Agha is a dedicated Web Designer and Front-end Developer based in Silicon Valley. He specializes in crafting clean, responsive web designs that enhance user experience and accessibility. With a keen eye for detail and a commitment to best practices, Agha strives to create visually appealing and functional websites tailored to meet the needs of diverse clients.</p>
+
+        <div class=" wow fadeInUp container-skillbar" data-wow-delay="0.2s">
+          <div class="skillbar clearfix " data-percent="90%">
+            <div class="skillbar-title" style="background: #DD1E2F;"><span>HTML5</span></div>
+            <div class="skillbar-bar" style="background: #DD1E2F;"></div>
+            <div class="skill-bar-percent">90%</div>
+          </div> <!-- End Skill Bar -->
+
+          <div class="skillbar clearfix " data-percent="80%">
+            <div class="skillbar-title" style="background: #EBB035;"><span>CSS3</span></div>
+            <div class="skillbar-bar" style="background: #EBB035;"></div>
+            <div class="skill-bar-percent">80%</div>
+          </div> <!-- End Skill Bar -->
+
+          <div class="skillbar clearfix " data-percent="75%">
+            <div class="skillbar-title" style="background: #218559;"><span>Photoshop</span></div>
+            <div class="skillbar-bar" style="background: #218559;"></div>
+            <div class="skill-bar-percent">75%</div>
+          </div> <!-- End Skill Bar -->
+
+          <div class="skillbar clearfix " data-percent="45%">
+            <div class="skillbar-title" style="background: #6840D4;"><span>Rails</span></div>
+            <div class="skillbar-bar" style="background: #6840D4;"></div>
+            <div class="skill-bar-percent">45%</div>
+          </div> <!-- End Skill Bar -->
+
+          <div class="skillbar clearfix " data-percent="30%">
+            <div class="skillbar-title" style="background: #06A2CB;"><span>jQuery</span></div>
+            <div class="skillbar-bar" style="background: #06A2CB;"></div>
+            <div class="skill-bar-percent">30%</div>
+          </div> <!-- End Skill Bar -->
+
+          <div class="skillbar clearfix " data-percent="20%">
+            <div class="skillbar-title" style="background: #AB4DD2;"><span>PHP</span></div>
+            <div class="skillbar-bar" style="background: #AB4DD2;"></div>
+            <div class="skill-bar-percent">20%</div>
+          </div> <!-- End Skill Bar -->
+        </div>
+      </div>
+    </div>
+    <!-- end section -->
+
+
+    <!-- begin section -->
+
+    <div class="section" data-anchor="contact">
+      <div class="content wow fadeInDown" data-wow-delay="0.2s">
+        <h1>CONTACT ME</h1>
+        <p>Whether you're interested in working with me or just want to say hello, I'd love to hear from you!</p>
+        <br>
+        <div class="contact-form">
+
+          <div id="form-messages"></div>
+          <form id="ajax-contact" method="post" role="form" action="contact.php" data-toggle="validator">
+            <div class="form-group has-feedback wow fadeInLeft" data-wow-delay="0.6s">
+              <input type="text" class="form-control" id="name" name="name" placeholder="NAME" data-error="Field can't be blank!" required>
+              <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback wow fadeInRight" data-wow-delay="0.8s">
+              <input type="email" class="form-control" id="email" name="email" placeholder="EMAIL" data-error="Field can't be blank!" required>
+              <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback wow fadeInLeft" data-wow-delay="1s">
+              <textarea data-minlength="10" class="form-control" id="message" name="message" placeholder="MESSAGE" data-error="Minimum of 10 characters" required></textarea>
+              <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="hidden">
+              <input type="text" class="form-control" id="human" name="human" placeholder="">
+            </div>
+            <div class="wow fadeInUp" data-wow-delay="1s">
+              <button type="submit" id="submit" name="submit" class="btn btn-lg">SEND MESSAGE</button>
+            </div>
+          </form>
+          <br>
+        </div>
+      </div>
+    </div>
+    <!-- end section -->
+
+    <!-- begin section -->
+
+    <div class="section fp-auto-height">
+      <div class="footer">
+        <p>CONNECT WITH ME</p>
+        <div class="social-links">
+          <span><a href="https://www.linkedin.com/in/aghasyedi" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></span>
+          <span><a target="_blank" href="https://twitter.com/AghaSyedi" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></span>
+          <span><a href="https://github.com/aghasyedi" target="_blank"><i class="fa fa-github fa-2x"></i></a></span>
+        </div>
+      </div>
+    </div>
+    <!-- end section -->
+
+  </div>
+  <!-- end fullpage -->
+</body>
+<!-- partial -->
+  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.4/jquery.fullPage.min.js'></script><script  src="./script.js"></script>
+<script>$(document).ready(function () {
+  // typing animation
+  (function ($) {
+    $.fn.writeText = function (content) {
+      var contentArray = content.split(""),
+        current = 0,
+        elem = this;
+      setInterval(function () {
+        if (current < contentArray.length) {
+          elem.text(elem.text() + contentArray[current++]);
+        }
+      }, 80);
+    };
+  })(jQuery);
+
+  // input text for typing animation
+  $("#holder").writeText("WEB DESIGNER + FRONT-END DEVELOPER");
+
+  // initialize wow.js
+  new WOW().init();
+
+  // Push the body and the nav over by 285px over
+  var main = function () {
+    $(".fa-bars").click(function () {
+      $(".nav-screen").animate(
+        {
+          right: "0px"
+        },
+        200
+      );
+
+      $("body").animate(
+        {
+          right: "285px"
+        },
+        200
+      );
+    });
+
+    // Then push them back */
+    $(".fa-times").click(function () {
+      $(".nav-screen").animate(
+        {
+          right: "-285px"
+        },
+        200
+      );
+
+      $("body").animate(
+        {
+          right: "0px"
+        },
+        200
+      );
+    });
+
+    $(".nav-links a").click(function () {
+      $(".nav-screen").animate(
+        {
+          right: "-285px"
+        },
+        500
+      );
+
+      $("body").animate(
+        {
+          right: "0px"
+        },
+        500
+      );
+    });
+  };
+
+  $(document).ready(main);
+
+  // initiate full page scroll
+
+  $("#fullpage").fullpage({
+    scrollBar: true,
+    responsiveWidth: 400,
+    navigation: true,
+    navigationTooltips: ["home", "about", "portfolio", "contact", "connect"],
+    anchors: ["home", "about", "portfolio", "contact", "connect"],
+    menu: "#myMenu",
+    fitToSection: false,
+
+    afterLoad: function (anchorLink, index) {
+      var loadedSection = $(this);
+
+      //using index
+      if (index == 1) {
+        /* add opacity to arrow */
+        $(".fa-chevron-down").each(function () {
+          $(this).css("opacity", "1");
+        });
+        $(".header-links a").each(function () {
+          $(this).css("color", "white");
+        });
+        $(".header-links").css("background-color", "transparent");
+      } else if (index != 1) {
+        $(".header-links a").each(function () {
+          $(this).css("color", "black");
+        });
+        $(".header-links").css("background-color", "white");
+      }
+
+      //using index
+      if (index == 2) {
+        /* animate skill bars */
+        $(".skillbar").each(function () {
+          $(this)
+            .find(".skillbar-bar")
+            .animate(
+              {
+                width: $(this).attr("data-percent")
+              },
+              2500
+            );
+        });
+      }
+    }
+  });
+
+  // move section down one
+  $(document).on("click", "#moveDown", function () {
+    $.fn.fullpage.moveSectionDown();
+  });
+
+  // fullpage.js link navigation
+  $(document).on("click", "#skills", function () {
+    $.fn.fullpage.moveTo(2);
+  });
+
+  $(document).on("click", "#projects", function () {
+    $.fn.fullpage.moveTo(3);
+  });
+
+  $(document).on("click", "#contact", function () {
+    $.fn.fullpage.moveTo(4);
+  });
+
+  // smooth scrolling
+  $(function () {
+    $("a[href*=#]:not([href=#])").click(function () {
+      if (
+        location.pathname.replace(/^\//, "") ==
+          this.pathname.replace(/^\//, "") &&
+        location.hostname == this.hostname
+      ) {
+        var target = $(this.hash);
+        target = target.length
+          ? target
+          : $("[name=" + this.hash.slice(1) + "]");
+        if (target.length) {
+          $("html,body").animate(
+            {
+              scrollTop: target.offset().top
+            },
+            700
+          );
+          return false;
+        }
+      }
+    });
+  });
+
+  //ajax form
+  $(function () {
+    // Get the form.
+    var form = $("#ajax-contact");
+
+    // Get the messages div.
+    var formMessages = $("#form-messages");
+
+    // Set up an event listener for the contact form.
+    $(form).submit(function (e) {
+      // Stop the browser from submitting the form.
+      e.preventDefault();
+
+      // Serialize the form data.
+      var formData = $(form).serialize();
+
+      // Submit the form using AJAX.
+      $.ajax({
+        type: "POST",
+        url: $(form).attr("action"),
+        data: formData
+      })
+        .done(function (response) {
+          // Make sure that the formMessages div has the 'success' class.
+          $(formMessages).removeClass("error");
+          $(formMessages).addClass("success");
+
+          // Set the message text.
+          $(formMessages).text(response);
+
+          // Clear the form.
+          $("#name").val("");
+          $("#email").val("");
+          $("#message").val("");
+        })
+        .fail(function (data) {
+          // Make sure that the formMessages div has the 'error' class.
+          $(formMessages).removeClass("success");
+          $(formMessages).addClass("error");
+
+          // Set the message text.
+          if (data.responseText !== "") {
+            $(formMessages).text(data.responseText);
+          } else {
+            $(formMessages).text(
+              "Oops! An error occured and your message could not be sent."
+            );
+          }
+        });
+    });
+  });
+});</script>

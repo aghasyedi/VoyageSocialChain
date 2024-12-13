@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+    <title>Post - Voyage</title>
+    <link id="common-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/day-mode-common.css') }}" />
+
+    <!-- Dynamic theme stylesheet -->
+    <link id="theme-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/nprofile.css') }}" />
+
+    <style>
+    </style>
+    <script src="{{ url_for('static', filename='js/daynight-toggle.js') }}" defer></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('feed') }}" style="text-decoration:none;">
+            <h1>Voyage</h1>
+        </a>
+        <div class="search-container">
+            <div class="toggle-wrapper">
+                <input type="checkbox" id="night-button" class="toggle-night" />
+                <label for="night-button" class="toggle-label">
+                    <span class="toggle-icon"></span>
+                </label>
+            </div>
+            <input type="text" placeholder="Search..." aria-label="Search" id="search-input">
+            <div id="search-dropdown" class="search-dropdown">
+                <ul id="search-results"></ul>
+            </div>
+
+            <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+
+            <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+    </div>
+    <!-- <div class="username-display">
+        <div style="margin-top: 80px; "></div>
+        {{currentuser['name']}}
+    </div> -->
+
+
+    <div class="whole-container">
+        <div class="profile-section">
+            <div class="profile-card">
+                <a href="{{ url_for('user_profile', username=currentuser['username']) }}"
+                    style="text-decoration: none; color: inherit;">
+                    <center><br>
+                        <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png"
+                            alt="Profile Picture"
+                            style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4caf50;">
+                    </center><br />
+                    </center>
+
+                    <!-- {{ currentuser['name'] }} -->
+                    <p><strong>UID:</strong> {{ currentuser['username'] }}</p>
+                    <p><strong>Name:</strong> {{ currentuser['name'] }}</p>
+                    <p><strong>Joined:</strong> {{ currentuser['time_ago'] }}</p>
+                    <p><strong>Total Posts:</strong> {{ currentuser['no_of_posts'] }}</p>
+                </a>
+                <!-- <p><strong>Posts:</strong> {{ post_count }}</p> -->
+                <a href="{{ url_for('edit_profile')}}" class="button" style="text-decoration: none;">Edit Profile</a>
+            </div>
+        </div>
+        
+
+        <div class="profile-container">
+            <h3>
+                <p>Post</p>
+            </h3>
+            <hr>
+            <!-- User's Posts Section -->
+            <div class="user-posts">
+
+                <!-- Example Post 1
+            <div class="post">
+                <h4>Post Title 1</h4>
+                <p>This is a short description or the content of the post.</p>
+            </div> -->
+                <div class="container">
+                    <div class="post">
+                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                            <img src="{{ url_for('static', filename='img/lion.jpg') }}" alt="User Profile"
+                                class="circular-image"
+                                style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                            <!-- <div style="margin-top: 5px; font-weight: bold;">{{ post.username }} <em>{{ post.date }}</em></div>  -->
+                            <div style="margin-top: 5px; font-weight: bold;">
+                                <a href="{{ url_for('user_profile', username=post.username) }}"
+                                    style="text-decoration: none; color: inherit;">{{ post.name }}</a>
+                                <span style="color: #4caf50;"> • </span>
+                                <em style="font-weight: normal;">{{ post.date }}</em>
+                            </div>
+                            <br />
+
+
+                        </div>
+                        <!-- <em>{{ post.date }}</em><br/>   {{filenames}} -->
+                        <!-- <img src="https://img.freepik.com/free-photo/stunning-square-portrait-adorable-cute-cat_181624-37290.jpg" 
+                             alt="Post Image" style="object-fit: cover; border-radius: 10px;"> -->
+                        <div class="image-container">
+                            <center><img src="{{ url_for('static', filename=post.postimg[7:]) }}" alt="Post Image"
+                                    class="post-image"></center>
+                        </div>
+                        <div><a href="{{ url_for('user_profile', username=post.username) }}"
+                                style="text-decoration: none; color: inherit;"><strong>{{ post.username }}</strong></a>:
+                            {{ post.content }}</div>
+                        <!-- <div class="likes">100 likes</div>
+                        <div class="comments">15 comments</div> -->
+                        <br />
+                        <div class="interaction">
+                            <!-- <button class="button">Like</button> -->
+                            {% if currentuser['username']==post.username %}
+                            <a href="{{url_for('edit_post', post_id=post.post_id)}}" style="text-decoration: none;">
+                                <button class="button">Edit Post</button></a>
+                            {% endif %}
+                            <textarea id="textToCopy-{{post.post_id}}" style="display:none;">
+                                {{url_for('post_info', post_id=post.post_id,_external = True)}}
+                            </textarea>
+                            <button class="button" onclick="copyToClipboard('{{ post.post_id }}')">Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer" style="z-index: 2;">
+        <div class="container-x">
+            <div class="footer-content">
+                <p>&copy; 2024 AGHA T SYEDI. All rights reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="/about" style="text-decoration: none; color: inherit;">About Us</a></li>
+                    <li><a href="/privacy" style="text-decoration: none; color: inherit;">Privacy Policy</a></li>
+                    <li><a href="/terms" style="text-decoration: none; color: inherit;">Terms of Service</a></li>
+                    <li><a href="/user/agha" style="text-decoration: none; color: inherit;">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

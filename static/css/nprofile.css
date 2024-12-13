@@ -1,0 +1,128 @@
+.container {
+  margin: auto;
+  max-width: 600px;
+  padding: 20px;
+  width: calc(max-width - 200px);
+}
+.post-image {
+  border: 1px solid #45a049;
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+}
+.post img {
+  border: #45a0499d 2px solid;
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+}
+.profile-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 800px;
+  min-width: 500px;
+  padding: 20px;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  text-align: center;
+}
+.profile-section{
+  margin-top: 30vh;
+}
+.profile-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.profile-header .user-info {
+  flex-grow: 1;
+  margin-left: 20px;
+  text-align: left;
+}
+.profile-header img {
+  border-radius: 50%;
+  height: 120px;
+  object-fit: cover;
+  width: 120px;
+}
+
+.purplish {
+  background: linear-gradient(135deg, #800080, #b19cd9) !important;
+}
+.purplish:hover {
+  background: linear-gradient(135deg, #670067, #8f7cb1) !important;
+}
+.user-bio {
+  color: #333;
+  font-size: 16px;
+  margin: 20px 0;
+}
+.user-info h2 {
+  font-size: 24px;
+  margin: 0;
+}
+.user-info p {
+  color: gray;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.user-posts {
+  text-align: left;
+}
+.user-posts h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+
+.friend-box {
+  border: 1px solid #4caf50;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  color: #000000;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  justify-content: center;
+}
+
+.friend-box img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 2px solid #4caf50;
+  /* Green border for profile image */
+}
+
+.friend-box p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #45a049;
+}
+
+.hover-text {
+  display: none;
+  position: absolute;
+  font-size: smaller;
+  top: 40px; /* Position the text below the button */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background-color: #00d9ffd8;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.button-container {
+  position: relative;
+  display: inline-block;
+}

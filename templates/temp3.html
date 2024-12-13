@@ -1,0 +1,86 @@
+<div class="friend-list">
+  {% if not friendListName %}
+  <h3 style="color: red">No Following</h3>
+  {% endif %} {% for friend in friendListName %}
+  <div class="friend-container">
+    <a href="{{ url_for('user_profile', username=friend[0]) }}" class="friend-link">
+      <div class="friend-box">
+        <img
+          src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png"
+          alt="Friend Profile Picture"
+        />
+        <div>
+          <p>{{ friend[1] }}</p>
+          @{{ friend[0] }} {{friend[2]}}
+        </div>
+      </div>
+    </a>
+    <div>
+      <form action="/remove-friend-request" method="POST" class="unfollow-form">
+        <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+        <input type="hidden" name="username" value="{{ user.username }}" />
+        <input type="hidden" name="area" value="profile" />
+        <button type="submit" name="action" value="remove" class="unfollow-button">Unfollow</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<style>
+  .friend-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the right */
+    margin-right: 20px; /* Add some margin from the edge of the screen */
+  }
+
+  .friend-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px; /* Set a fixed width for the container */
+    margin-bottom: 20px; /* Add space between friend cards */
+  }
+
+  .friend-link {
+    text-decoration: none;
+    color: inherit;
+    flex-grow: 1;
+  }
+
+  .friend-box {
+    display: flex;
+    align-items: center;
+    background-color: #f0f8ff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .friend-box img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .unfollow-form {
+    margin-left: 10px;
+  }
+
+  .unfollow-button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: #ff6347;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .unfollow-button:hover {
+    background-color: #ff4500;
+  }
+</style>

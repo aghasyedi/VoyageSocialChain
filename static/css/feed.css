@@ -1,0 +1,502 @@
+
+
+
+h2 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  background-color: #121212;
+  margin: 7% auto;
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 30px rgba(255, 0, 255, 0.2);
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid #00eaff;
+}
+.modal-content img{
+  max-width: 50vh;
+  max-height: 40vh;
+  margin-top: 10px;
+}
+.close {
+  color: #ff00ff;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #00eaff; /* Dark green */
+}
+
+/* .post {
+border-bottom: 1px solid #eaeaea;
+padding: 10px 0;
+transition: transform 0.2s;
+} */
+
+
+.post:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+}
+
+.interaction {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+
+.file-upload-label {
+  display: inline-block;
+  padding: 5px 7px; /* Increased padding for better click area */
+  background-color: #7f4ae0; /* Purple background */
+  color: white; /* White text */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin-top: 2px; /* Space above the button */
+  margin-bottom: 5px;
+  text-align: center; /* Centered text */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition effects */
+}
+
+.file-upload-label:hover {
+  background-color: #653ab5; /* Darker purple on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.file-upload-label:active {
+  background-color: #57309f; /* Even darker shade when clicked */
+  transform: scale(0.95); /* Slightly shrink when clicked */
+}
+
+.file-upload-label:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Shadow for focus effect */
+}
+
+
+#removeImageButton {
+  background-color: #d9534f; /* Bootstrap Danger Color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 5px 7px; /* Padding for a better click area */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+  margin-bottom: 5px;
+}
+
+#removeImageButton:hover {
+  background-color: #c9302c; /* Darker shade on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+#removeImageButton:active {
+  background-color: #ac2925; /* Even darker shade when clicked */
+  transform: scale(0.95); /* Slightly shrink when clicked */
+}
+
+#removeImageButton:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Shadow for focus effect */
+}
+
+
+
+
+
+
+.go-home button {
+  text-decoration: none;
+  color: #00eaff; /* Neon blue */
+  background-color: rgba(18, 18, 18, 0.9); /* Dark background */
+  border: 2px solid #00eaff; /* Neon blue border */
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 5ch;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.go-home button:hover {
+  background-color: #0193a0; /* Darker shade of neon blue on hover */
+  transform: scale(1.05); /* Slightly larger on hover */
+}
+h2{
+  color: #77eef9;
+}
+p{
+  color: #98eef6;
+}
+
+.edit-profile-container {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: rgba(18, 18, 18, 0.9); /* Dark container background */
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.2); /* Purplish shadow */
+  padding: 20px;
+}
+
+.edit-profile-container h2 {
+  text-align: center;
+  color: #00eaff; /* Neon blue text */
+  text-shadow: 0 0 10px #00eaff; /* Glowing text effect */
+}
+
+.form-group input {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #00eaff; /* Neon blue border */
+  border-radius: 5px;
+  box-sizing: border-box;
+  background: rgba(18, 18, 18, 0.8); /* Dark background for input */
+  color: #00eaff; /* Neon blue text */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff00ff; /* Purplish border on focus */
+}
+
+.form-group input[readonly] {
+  background-color: rgba(18, 18, 18, 0.5); /* Slightly lighter background */
+}
+
+.submit-button {
+  background-color: #ff00ff; /* Neon purple button */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #b202b2; /* Darker purple on hover */
+  transform: scale(1.05); /* Slight increase in size */
+}
+
+
+/* Sidebar styles */
+.friends-sidebar {
+  position: fixed;
+  right: 0;
+  max-width: 35dvh;
+  min-width: 30dvh;
+  height: 100%;
+  background-color: #121212; /* Dark background */
+  border: 2px solid #00eaff; /* Neon blue border */
+  border-top-left-radius: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  color: #eaeaea; /* Light text for readability */
+}
+
+/* Search bar styles */
+#searchBar {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #00eaff; /* Neon blue border */
+  border-radius: 10px 0px 0px 0px;
+  font-size: 16px;
+  background-color: #1e1e1e; /* Darker input background */
+  color: #eaeaea; /* Light text */
+}
+h6{
+  color: white;
+}
+#searchBar:focus {
+  outline: none;
+  box-shadow: 0 0 10px #00eaff; /* Glow effect on focus */
+}
+
+/* Friends list styles */
+#friendsList {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-bottom: 20dvh;
+  border: 1px solid #00eaff; /* Neon blue border */
+  border-radius: 0 0 20px 20px;
+  background-color: #1a1a1a; /* Darker background for list */
+  color: #eaeaea; /* Light text */
+}
+
+/* Friend list item styles */
+#friendsList li {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Friend name link styles */
+.friend-name {
+  text-decoration: none;
+  color: #00eaff; /* Neon blue text */
+  font-weight: bold;
+}
+
+.friend-name:hover {
+  text-decoration: underline;
+  color: #ff00ff; /* Neon pink on hover */
+}
+
+/* Friend action form styles */
+.friend-action-form {
+  display: inline-block;
+  border: 2px solid #00eaff; /* Neon blue border */
+  border-radius: 8px;
+  padding: 3px;
+  background-color: #1e1e1e; /* Darker form background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Unfollow button styles */
+.unfollow-button {
+  border: none;
+  background-color: #ff6347; /* Red button */
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.unfollow-button:hover {
+  background-color: #e55337; /* Darker red on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.unfollow-button:active {
+  background-color: #c8442f; /* Even darker red when clicked */
+  transform: scale(0.95); /* Slightly shrink on click */
+}
+
+/* Follow button styles */
+.follow-button {
+  border: none;
+  background-color: #4caf50; /* Green button */
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.follow-button:hover {
+  background-color: #43a047; /* Darker green on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.follow-button:active {
+  background-color: #388e3c; /* Even darker green when clicked */
+  transform: scale(0.95); /* Slightly shrink on click */
+}
+
+
+.pending-button {
+  border: none;
+  background-color: #b2bb46;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.notify-container {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  bottom: -17px;
+}
+/* Day Theme */
+
+/* Night Theme */
+
+/* Notification Icon */
+.notify-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #d24e8f; /* Pinkish color */
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red; /* Cyanish color */
+  color: white;
+  border-radius: 50%;
+  padding: 4px 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Notification Box */
+.notification-box {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 300px;
+  background-color: #1d1f26; /* Darker background for night theme */
+  border: 1px solid #00eaff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(255, 20, 147, 0.2); /* Pinkish glow shadow */
+  display: none;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Notification Box Header */
+.notification-box .header {
+  padding: 12px;
+  background-color: #222; /* Dark background for header */
+  border-bottom: 1px solid #00eaff;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #f8f8f8; /* Light text color */
+  text-align: center;
+}
+
+/* Notification Box Content */
+.notification-box .content {
+  padding: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+/* Individual Item Styling */
+.notification-box .item {
+  padding: 12px;
+  border-bottom: 1px solid #00eaff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  border-radius: 10px;
+}
+
+.notification-box .item:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Light pink hover effect */
+
+  border-radius: 10px;
+}
+
+/* User Info Inside Item */
+.notification-box .item .friend-name {
+  text-decoration: none;
+  color: #f8f8f8;
+}
+
+.notification-box .item .friend-name h6 {
+  font-size: 0.85em;
+  color: #bbb;
+  font-weight: normal;
+  margin: 0;
+}
+
+.notification-box .item .friend-name span {
+  font-weight: bold;
+  font-size: 1em;
+  color: #f8f8f8;
+}
+
+/* Right-side Button inside Item */
+.notification-box .item .friend-action-form {
+  margin: 0;
+}
+
+.notification-box .item .follow-button {
+  padding: 8px 16px;
+  background-color: #ff00ff; /* Pinkish button */
+  color: white;
+  border: none;
+  margin-left: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.notification-box .item .follow-button:hover {
+  background-color: #c903c9; /* Darker pink hover effect */
+}
+
+.notification-box .item .follow-button:focus {
+  outline: none;
+}
+
+/* Bell Icon Styling */
+.bell-icon {
+  width: 30px;
+  height: 30px;
+  fill: #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s, fill 0.3s ease;
+}
+
+.bell-icon:hover {
+  transform: scale(1.07);
+  fill: #00ced1; /* Cyan bell icon on hover */
+}
+
+.hover-text {
+  display: none;
+  position: absolute;
+  font-size: smaller;
+  top: 40px; /* Position the text below the button */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background-color: #ff00ffba;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.button-container {
+  position: relative;
+  display: inline-block;
+}
+@media (max-width: 768px) {
+  .friends-sidebar {
+    display: none;
+  }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+    <title>Post - Voyage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <style>
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('feed') }}" style="text-decoration:none;">
+            <h1>Voyage</h1>
+        </a>
+        <div class="search-container">
+            <div class="toggle-wrapper">
+                <input type="checkbox" id="night-button" class="toggle-night" />
+                <label for="night-button" class="toggle-label">
+                    <span class="toggle-icon"></span>
+                </label>
+            </div>
+            <input type="text" placeholder="Search..." aria-label="Search" id="search-input">
+            <div id="search-dropdown" class="search-dropdown">
+                <ul id="search-results"></ul>
+            </div>
+
+            <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+
+            <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+    </div>
+    <div style="margin-top: 80px; "></div>
+    <!-- <div class="username-display">
+        {{currentuser['name']}}
+    </div> -->
+
+
+    <div class="whole-container"></div>
+    <div class="profile-section">
+        <div class="profile-card">
+            <a href="{{ url_for('user_profile', username=currentuser['username']) }}" style="text-decoration: none; color: inherit;">
+                <center><br>
+                    <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4caf50;">
+                </center><br />
+                </center>
+
+                <!-- {{ currentuser['name'] }} -->
+                <p><strong>UID:</strong> {{ currentuser['username'] }}</p>
+                <p><strong>Name:</strong> {{ currentuser['name'] }}</p>
+                <p><strong>Joined:</strong> {{ currentuser['time_ago'] }}</p>
+                <p><strong>Total Posts:</strong> {{ currentuser['no_of_posts'] }}</p>
+            </a>
+            <!-- <p><strong>Posts:</strong> {{ post_count }}</p> -->
+            <a href="{{ url_for('edit_profile')}}" class="button" style="text-decoration: none;">Edit Profile</a>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <h3>
+            <p>Post</p>
+        </h3>
+        <hr>
+        <!-- User's Posts Section -->
+        <div style='text-align:left; min-width: 600px;max-width: 800px;'>Post <u>{{post_id}}</u> does not exist<br></p>
+            </h3>
+            Go to <a href="{{ url_for('feed') }}" style="text-decoration:none; color:#4caf50; font-weight: bold;">Feed</a>
+        </div>
+    </div>
+    </div>
+    </div>
+    <footer class="footer" style="z-index: 2;">
+        <div class="container-x">
+            <div class="footer-content">
+                <p>&copy; 2024 AGHA T SYEDI. All rights reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="/about" style="text-decoration: none; color: inherit;">About Us</a></li>
+                    <li><a href="/privacy" style="text-decoration: none; color: inherit;">Privacy Policy</a></li>
+                    <li><a href="/terms" style="text-decoration: none; color: inherit;">Terms of Service</a></li>
+                    <li><a href="/user/agha" style="text-decoration: none; color: inherit;">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

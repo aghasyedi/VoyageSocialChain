@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+    <title>{{user['name']}} | Profile - Voyage</title>
+    <!-- <link id="theme-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}"> -->
+
+    <!-- Common styles for night and day modes -->
+    <link id="common-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/day-mode-common.css') }}" />
+
+    <!-- Dynamic theme stylesheet -->
+    <link id="theme-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/nprofile.css') }}" />
+
+    <script src="{{ url_for('static', filename='js/daynight-toggle.js') }}" defer></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('feed') }}" style="text-decoration:none;">
+            <h1>Voyage</h1>
+        </a>
+        <div class="search-container">
+            <div class="toggle-wrapper">
+                <input type="checkbox" id="night-button" class="toggle-night" />
+                <label for="night-button" class="toggle-label">
+                    <span class="toggle-icon"></span>
+                </label>
+            </div>
+            <input type="text" placeholder="Search..." aria-label="Search" id="search-input">
+            <div id="search-dropdown" class="search-dropdown">
+                <ul id="search-results"></ul>
+            </div>
+            <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+
+            <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        </div>
+    </div>
+    <div style="margin-top: 80px; "></div>
+    <!-- <div class="username-display">
+        {{currentuser['name']}}
+    </div> -->
+
+
+    <div class="whole-container"></div>
+    <div class="profile-section">
+        <div class="profile-card">
+            <a href="{{ url_for('user_profile', username=currentuser['username']) }}" style="text-decoration: none; color: inherit;">
+                <center><br>
+                    <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4caf50;">
+                </center><br />
+                </center>
+                <!-- {{ currentuser['name'] }} -->
+                <p><strong>UID:</strong> {{ currentuser['username'] }}</p>
+                <p><strong>Name:</strong> {{ currentuser['name'] }}</p>
+                <p><strong>Joined:</strong> {{ currentuser['time_ago'] }}</p>
+                <p><strong>Total Posts:</strong> {{ currentuser['no_of_posts'] }}</p>
+            </a>
+            <!-- <p><strong>Posts:</strong> {{ post_count }}</p> -->
+            <a href="{{ url_for('edit_profile')}}" class="button" style="text-decoration: none;">Edit Profile</a>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <!-- Profile Picture -->
+            <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png" alt="User Profile Picture">
+
+            <!-- User Info -->
+            <div class="user-info">
+                <h2>{{user['name']}}</h2>
+                <p>@{{user['username']}}</p>
+            </div>
+            {% if user['username'] != currentuser['username'] %}
+            {% if friend %}
+            <!-- Form for removing a friend -->
+            <form action="/remove-friend-request" method="POST" style="
+            display: inline-block;
+            border: 2px solid #FF6347;
+            border-radius: 8px;
+            padding: 3px;
+            background-color: #F0F8FF;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="profile" />
+              <button type="submit" name="action" value="remove" style="border: none; border-radius: 5px; padding: 10px 15px; background-color: #FF6347; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">
+                Unfollow
+              </button>
+            </form>
+            {% else %} {% if user.user_id in sentRequests %}
+            <form action="/cancel-friend-request" style="
+            display: inline-block;
+            border: 2px solid #b2bb46;
+            border-radius: 8px;
+            padding: 3px;
+            background-color: #F0F8FF;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" method="post">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="profile" />
+              <div style="position: relative; display: inline-block">
+              <hovbutton>
+                <button type="submit" name="action" value="pending" style="border: none; border-radius: 5px; padding: 10px 15px; background-color: #b2bb46; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">
+                    Pending
+                  </button>
+                </hovbutton>
+                <div class="hover-text">Cancel Pending Request</div>
+              </div>
+            </form>
+            <style></style>
+            <script>
+              const button = document.querySelector("hovbutton");
+              const hoverText = document.querySelector(".hover-text");
+
+              button.addEventListener("mouseenter", () => {
+                hoverText.style.display = "block";
+              });
+
+              button.addEventListener("mouseleave", () => {
+                hoverText.style.display = "none";
+              });
+            </script>
+            </form>
+
+            {% else %}
+            <!-- Form for adding a friend -->
+            <form action="/send-friend-request" method="POST" style="
+            display: inline-block;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 3px;
+            background-color: #F0F8FF;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="profile" />
+              <button type="submit" name="action" value="add" style="border: none; border-radius: 5px; padding: 10px 15px; background-color: #4caf50; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">Follow</button>
+            </form>
+            {% endif %}{% endif %}
+            {% endif %}
+        </div>
+        <p>
+        <div style='text-align:left;'><strong>Account Created</strong>: {{user['date'][:10]}},{{user['date'][11:16]}} (Time in 24HR format) </p>
+
+            <!-- Bio Section -->
+            <div class="user-bio">
+                <!-- <p>BIO HERE: {{bio}}</p> -->
+
+
+            </div>
+
+            {% if friend %}
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <div style="display: flex;">
+                <button class='button' id="showContent2">Posts</button>&emsp;
+                <button class='button' id="showContent1">Following</button>&emsp;
+                <button class='button' id="showContent3">Follower</button>
+            </div>
+            <div id="contentDiv1" style="display: none;">
+                <style>
+                </style>
+                <div class="friend-list">
+
+                    {% if not friendListName %}
+                    <h3 style="color: red;">No Following</h3>
+                    {%endif%}
+
+                    {% for friend in friendListName %}
+                <div><a href="{{ url_for('user_profile', username=friend[0]) }}" style="text-decoration: none; color: inherit;">
+                        <div class="friend-box">
+                            <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png" alt="Friend Profile Picture">
+                            <div>
+                                <p>{{ friend[1] }}</p>@{{ friend[0] }}
+                            </div>
+                        </div>
+                    </a></div>
+                    <!-- {% for user in userList %}
+                        <div>
+                            {% if user.isFollowing == 'true' %}
+                                {% if user.name == friend[1] %}
+                                <form action="/remove-friend-request" method="POST" class="friend-action-form">
+                                    <input type="hidden" name="friendUID" value="{{ friend[2] }}" />
+                                    <input type="hidden" name="username" value="{{ friend[0] }}" />
+                                    <input type="hidden" name="area" value="feed" />
+                                    <button type="submit" style="background-color: red;" name="action" value="remove" class="unfollow-button">
+                                      Unfollow
+                                    </button>
+                                  </form>
+                                
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %} -->
+                    
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div id="contentDiv3" style="display: none;">
+                <style>
+                </style>
+                <div class="friend-list">
+
+                    {% if not followingListName %}
+                    <h3 style="color: red;">No Follower</h3>
+                    {%endif%}
+                    {% for friend in followingListName %}
+                    <a href="{{ url_for('user_profile', username=friend[0]) }}" style="text-decoration: none; color: inherit;">
+                        <div class="friend-box">
+                            <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png" alt="Friend Profile Picture">
+                            <div>
+                                <p>{{ friend[1] }}</p>@{{ friend[0] }}
+                            </div>
+                        </div>
+
+                    </a>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <script>
+                $(document).ready(function () {
+                    // Set the default selected button to "Posts"
+                    $("#showContent2").addClass("purplish");
+                    $("#contentDiv2").show();  // Show Posts content by default
+                    $("#contentDiv1, #contentDiv3").hide();  // Hide other content divs
+
+                    // Show Content 1 and hide Content 2 and 3
+                    $("#showContent1").click(function () {
+                        $("#contentDiv2").hide();
+                        $("#contentDiv3").hide();
+                        $("#contentDiv1").show();  // Show Content 1
+                        $(".button").removeClass("purplish");  // Remove purple gradient from all buttons
+                        $(this).addClass("purplish");  // Add purple gradient to clicked button
+                    });
+
+                    // Show Content 2 and hide Content 1 and 3
+                    $("#showContent2").click(function () {
+                        $("#contentDiv1").hide();
+                        $("#contentDiv3").hide();
+                        $("#contentDiv2").show();  // Show Content 2 (Posts)
+                        $(".button").removeClass("purplish");  // Remove purple gradient from all buttons
+                        $(this).addClass("purplish");  // Add purple gradient to clicked button
+                    });
+
+                    // Show Content 3 and hide Content 1 and 2
+                    $("#showContent3").click(function () {
+                        $("#contentDiv1").hide();
+                        $("#contentDiv2").hide();
+                        $("#contentDiv3").show();  // Show Content 3
+                        $(".button").removeClass("purplish");  // Remove purple gradient from all buttons
+                        $(this).addClass("purplish");  // Add purple gradient to clicked button
+                    });
+                });
+
+            </script>
+
+
+
+            <div id="contentDiv2" style>
+
+                <!-- User's Posts Section -->
+                <div class="user-posts">
+                    <h3>Posts</h3>
+                    <h4>Total number of Posts: _{{ user['no_of_posts'] }}_ </h4>
+                    <!-- Example Post 1
+            <div class="post">
+                <h4>Post Title 1</h4>
+                <p>This is a short description or the content of the post.</p>
+            </div> -->
+                    <div class="container">
+
+                        {% for post in user_data|reverse %}
+                        <div class="post">
+                            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                                <img src="{{ url_for('static', filename='img/lion.jpg') }}" alt="User Profile" class="circular-image" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                <!-- <div style="margin-top: 5px; font-weight: bold;">{{ post.username }} <em>{{ post.date }}</em></div>  -->
+                                <div style="margin-top: 5px; font-weight: bold;">
+                                    <a href="{{ url_for('user_profile', username=post.username) }}" style="text-decoration: none; color: inherit;">{{ post.name }}</a>
+                                    <span style="color: #4caf50;"> • </span>
+                                    <em style="font-weight: normal;">{{ post.date }}</em>
+                                </div>
+                                <br />
+
+
+                            </div>
+                            <!-- <em>{{ post.date }}</em><br/>   {{filenames}} -->
+                            <!-- <img src="https://img.freepik.com/free-photo/stunning-square-portrait-adorable-cute-cat_181624-37290.jpg" 
+                             alt="Post Image" style="object-fit: cover; border-radius: 10px;"> -->
+                            <a href="{{url_for('post_info', post_id=post.post_id)}}">
+                                <div class="image-container">
+                                    <center><img src="{{ url_for('static', filename=post.postimg[7:]) }}" alt="Post Image" class="post-image"></center>
+                                </div>
+                            </a>
+                            <div><a href="{{ url_for('user_profile', username=post.username) }}" style="text-decoration: none; color: inherit;"><strong>{{ post.username }}</strong></a>: {{ post.content }}</div>
+                            <!-- <div class="likes">100 likes</div>
+                        <div class="comments">15 comments</div> -->
+                            <br />
+                            <div class="interaction">
+                                <!-- <button class="button">Like</button> -->
+                                {% if currentuser['username']==post.username %}
+                                <a href="{{url_for('edit_post', post_id=post.post_id)}}" style="text-decoration: none;">
+                                    <button class="button">Edit Post</button></a>
+                                {% endif %}
+                                <textarea id="textToCopy-{{post.post_id}}" style="display:none;">
+                                {{url_for('post_info', post_id=post.post_id,_external = True)}}
+                            </textarea>
+                                <button class="button" onclick="copyToClipboard('{{ post.post_id }}')">Share</button>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+
+
+
+    <footer class="footer" style="z-index: 2;">
+        <div class="container-x">
+            <div class="footer-content">
+                <p>&copy; 2024 AGHA T SYEDI. All rights reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="/about" style="text-decoration: none; color: inherit;">About Us</a></li>
+                    <li><a href="/privacy" style="text-decoration: none; color: inherit;">Privacy Policy</a></li>
+                    <li><a href="/terms" style="text-decoration: none; color: inherit;">Terms of Service</a></li>
+                    <li><a href="/user/agha" style="text-decoration: none; color: inherit;">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

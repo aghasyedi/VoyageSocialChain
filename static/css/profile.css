@@ -1,0 +1,147 @@
+
+.profile-container {
+  min-width: 400px;
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #222;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profile-header img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+.profile-header .user-info {
+  flex-grow: 1;
+  margin-left: 20px;
+  text-align: left;
+}
+.profile-section{
+  margin-top: 30vh;
+}
+.user-info h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.user-info p {
+  color: gray;
+  font-size: 14px;
+  margin-top: 5px;
+}
+.user-bio {
+  margin: 20px 0;
+  font-size: 16px;
+  color: #333;
+}
+.user-posts {
+  text-align: left;
+}
+.user-posts h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+
+/* Purplish style for the clicked button */
+.purplish {
+  background: linear-gradient(135deg, #00eaff, #00eaff) !important; /* Purple gradient */
+}
+.purplish:hover {
+  background: linear-gradient(135deg, #0193a0, #0193a0) !important; /* Purple gradient */
+}
+
+.post:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+}
+
+.post img {
+  object-fit: cover;
+  border-radius: 10px;
+  border: #45a0499d 2px solid;
+  width: 100%;
+}
+
+.interaction {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+
+.go-home button {
+  text-decoration: none;
+  color: green;
+
+  background-color: white; /* Red */
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5ch;
+}
+
+
+
+
+
+.friend-box {
+  border: 1px solid #4caf50;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  background-color: #ff00ff42;
+  color: #00eeff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  justify-content: center;
+}
+
+.friend-box img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 2px solid #4caf50;
+  /* Green border for profile image */
+}
+
+.friend-box p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #d0ff00;
+}
+
+.hover-text {
+  display: none;
+  position: absolute;
+  font-size: smaller;
+  top: 40px; /* Position the text below the button */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background-color: #ff00ffba;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.button-container {
+  position: relative;
+  display: inline-block;
+}

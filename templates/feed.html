@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feed - Voyage</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}" />
+
+    <!-- Common styles for night and day modes -->
+    <link
+      id="common-stylesheet"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/day-mode-common.css') }}"
+    />
+
+    <!-- Dynamic theme stylesheet -->
+    <link
+      id="theme-stylesheet"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/nfeed.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/daynight-toggle.js') }}" defer></script>
+    <script>
+      // setInterval(function() {
+      //     window.location.reload();
+      // }, 30000); //30s
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("postModal");
+        const closeModal = () => {
+          modal.style.display = "none";
+        };
+
+        // Open modal on button click
+        document.getElementById("openModal").onclick = () => {
+          modal.style.display = "block";
+        };
+
+        // Close modal on clicking outside of it
+        window.onclick = (event) => {
+          if (event.target == modal) closeModal();
+        };
+
+        // Close modal on clicking the close button
+        document.querySelector(".close").onclick = closeModal;
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
+    <div class="navbar">
+      <a href="{{ url_for('feed') }}" style="text-decoration: none">
+        <h1>Voyage</h1>
+      </a>
+      <div style="position: relative; width: 100%">
+        <div class="notify-container">
+          <span class="notify-icon" id="notifyBtn">🔔</span>
+          <span class="badge" id="notificationCount">{{ recievedRequests | length}}</span>
+          <!-- Notification Dropdown -->
+          <div class="notification-box" id="notificationBox">
+            <div class="header">Follower Requests</div>
+            <div class="content">
+              {% if recievedRequests %} {% for recUserID in recievedRequests %}
+              <div class="item">
+                {% for user in userList %} {% if recUserID == user.user_id %}
+                <!-- Name aligned left -->
+                <a href="/user/{{ user['username'] }}" class="friend-name">
+                  {{ user.name }}<br />
+                  <h6 style="margin-block-start: 0em; margin-block-end: 0em; font-weight: 500">
+                    @{{user.username}}
+                  </h6>
+                </a>
+                <div>
+                  <form action="/approve-friend-request" method="POST" class="friend-action-form">
+                    <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+                    <input type="hidden" name="username" value="{{ user.username }}" />
+                    <input type="hidden" name="area" value="feed" />
+                    <button
+                      type="submit"
+                      name="action"
+                      style="background-color: green"
+                      value="add"
+                      class="follow-button"
+                    >
+                      <i class="fas fa-check"></i>
+                    </button>
+                  </form>
+                  <form action="/cancel-friend-request" method="POST" class="friend-action-form">
+                    <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+                    <input type="hidden" name="username" value="{{ user.username }}" />
+                    <input type="hidden" name="area" value="feed" />
+                    <button
+                      type="submit"
+                      name="action"
+                      style="background-color: red"
+                      value="add"
+                      class="follow-button"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </form>
+                </div>
+                {% endif %}{% endfor %} {{recUser}}
+              </div>
+              {% endfor %} {% else %}
+              <div style="text-align: center; padding: 10px; font-size: 1.2em; color: #4caf50">
+                <h2 style="color: #4caf50; font-size: 1em; font-weight: 900">
+                  You're All Caught Up!
+                </h2>
+                <p style="color: #7f4ae0; font-style: italic; font-size: 0.8em">
+                  No new requests at the moment. Check back later or reach out to someone new!
+                </p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <style></style>
+      <script>
+        const notifyBtn = document.getElementById("notifyBtn");
+        const notificationBox = document.getElementById("notificationBox");
+        const notificationCount = document.getElementById("notificationCount");
+
+        // Toggle notification dropdown visibility
+        notifyBtn.addEventListener("click", () => {
+          const isVisible = notificationBox.style.display === "block";
+          notificationBox.style.display = isVisible ? "none" : "block";
+        });
+
+        // Close notification dropdown when clicking outside
+        window.addEventListener("click", (event) => {
+          if (event.target !== notifyBtn && !notificationBox.contains(event.target)) {
+            notificationBox.style.display = "none";
+          }
+        });
+      </script>
+      <div class="search-container">
+        <div class="toggle-wrapper">
+          <input type="checkbox" id="night-button" class="toggle-night" />
+          <label for="night-button" class="toggle-label">
+            <span class="toggle-icon"></span>
+          </label>
+        </div>
+
+        <!-- Link to stylesheets -->
+
+        <input type="text" placeholder="Search..." aria-label="Search" id="search-input" />
+        <div id="search-dropdown" class="search-dropdown">
+          <ul id="search-results"></ul>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="button">Logout</a>
+      </div>
+    </div>
+
+    <div style="margin-top: 80px"></div>
+    <div class="" style="display: flex; margin: 0 auto; /* Full height */">
+      <div class="main-content" style="flex: 3; padding: 20px; overflow-y: auto">
+        <div class="username-display">
+          <h2 class="username-text" style="margin-bottom: 0">
+            Voyage: Your space to explore new horizons!
+          </h2>
+          <h4 style="margin-top: 1vh">
+            Blast off, {{ currentuser['name'] }}! Voyage is your space to bridge distances, <br />
+            stay close to loved ones, and create memories together, no matter where you are!
+          </h4>
+        </div>
+
+        <div class="profile-section">
+          <div class="profile-card">
+            <a
+              href="{{ url_for('user_profile', username=currentuser['username']) }}"
+              style="text-decoration: none; color: inherit"
+            >
+              <center>
+                <br />
+                <img
+                  src="https://gdm-catalog-fmapi-prod.imgix.net/ProductScreenshot/74919c82-78e5-4f1e-8164-9937cbe5deb6.png"
+                  alt="Profile Picture"
+                  style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4caf50"
+                />
+              </center>
+              <br />
+
+              <!-- {{ currentuser['name'] }} -->
+              <p><strong>UID:</strong> {{ currentuser['username'] }}</p>
+              <p><strong>Name:</strong> {{ currentuser['name'] }}</p>
+              <p><strong>Joined:</strong> {{ currentuser['time_ago'] }}</p>
+            </a>
+            <p><strong>Total Posts:</strong> {{ currentuser['no_of_posts'] }}</p>
+            <!-- <p><strong>Posts:</strong> {{ post_count }}</p> -->
+            <a href="{{ url_for('edit_profile')}}" class="button" style="text-decoration: none"
+              >Edit Profile</a
+            >
+            {% if currentuser['Admin'] %}
+            <br /><a
+              href="{{ url_for('admin')}}"
+              class="button"
+              style="text-decoration: none; background: #dd6262"
+              >Go to Admin Panel</a
+            >
+            {% endif %}
+          </div>
+        </div>
+
+        {% if confirmation %}
+        <p style="text-align: center; color: #8bc34a">{{ confirmation }}</p>
+        {% endif %}
+
+        <h2 style="text-align: center; margin-bottom: 0">Ready to Share Your Journey?</h2>
+        <p style="font-size: 16px; text-align: center; margin-top: 1vh">
+          Join the mission! Share your journey, connect with friends on Earth, <br />
+          and make unforgettable moments with family—no matter how far apart you are.
+        </p>
+        <button id="openModal" class="button" style="margin: 10px auto; display: block">
+          <i class="fas fa-plus"></i> Launch Post
+        </button>
+
+        <!-- <form id="upload-form" action="/feed/upload" method="POST" enctype="multipart/form-data">
+              <strong>Files:</strong><br>
+              <input id="file-picker" type="file" name="file" accept="image/*" multiple>
+              <div id="msg"></div>
+              <input type="submit" value="Upload!" id="upload-button">
+          </form> -->
+
+        <div id="postModal" class="modal" aria-hidden="true">
+          <div class="modal-content">
+            <span class="close" aria-label="Close modal">&times;</span>
+            <form action="/feed" id="postForm" method="POST" enctype="multipart/form-data">
+              <textarea
+                name="post_content"
+                id="post_content"
+                placeholder="What's on your mind?"
+                required
+              ></textarea>
+              <div
+                id="charCount"
+                style="text-align: right; color: darkslategrey; font-style: italic"
+              >
+                Characters: 0 / 100
+              </div>
+              <!-- Customized file upload button -->
+              <center>
+                <label
+                  for="file-picker"
+                  class="file-upload-label"
+                  onclick="toggleInputs('file-picker')"
+                  >Upload Image</label
+                >
+                <input
+                  id="file-picker"
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  onchange="handleFileSelect(event, 'file-picker')"
+                  style="display: none"
+                />
+
+                <!-- Direct camera capture -->
+                <label
+                  for="camera-picker"
+                  class="file-upload-label"
+                  onclick="toggleInputs('camera-picker')"
+                  >Capture Image</label
+                >
+                <input
+                  id="camera-picker"
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  capture="camera"
+                  onchange="handleFileSelect(event, 'camera-picker')"
+                  style="display: none"
+                />
+
+                <!-- Display selected image -->
+                <br />
+                <div id="preview-container" style="display: none">
+                  <img id="preview-image" alt="Selected Image" /><br />
+                  <button
+                    type="button"
+                    id="removeImageButton"
+                    style="display: none"
+                    onclick="removeImage()"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              </center>
+
+              <button type="submit" class="button" id="submitButton" disabled>
+                Launch into Voyage
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <script>
+          let selectedFile = null; // Store the selected file
+
+          // Function to toggle between file upload and camera capture
+          function toggleInputs(selectedId) {
+            const filePicker = document.getElementById("file-picker");
+            const cameraPicker = document.getElementById("camera-picker");
+
+            if (selectedId === "file-picker") {
+              cameraPicker.disabled = true; // Disable camera picker
+              filePicker.disabled = false; // Enable file picker
+              cameraPicker.value = ""; // Clear camera picker if switching to file upload
+            } else if (selectedId === "camera-picker") {
+              filePicker.disabled = true; // Disable file picker
+              cameraPicker.disabled = false; // Enable camera picker
+              filePicker.value = ""; // Clear file picker if switching to camera
+            }
+
+            validateForm(); // Validate form on input toggle
+          }
+
+          // Function to handle file selection
+          function handleFileSelect(event, inputId) {
+            const file = event.target.files[0]; // Get the selected file
+            const previewContainer = document.getElementById("preview-container");
+            const previewImage = document.getElementById("preview-image");
+            const removeImageButton = document.getElementById("removeImageButton");
+
+            // Clear previous file selections if switching inputs
+            if (inputId === "file-picker") {
+              document.getElementById("camera-picker").value = ""; // Clear camera picker
+              toggleInputs("file-picker"); // Disable camera input
+            } else if (inputId === "camera-picker") {
+              document.getElementById("file-picker").value = ""; // Clear file picker
+              toggleInputs("camera-picker"); // Disable file input
+            }
+
+            if (file) {
+              selectedFile = file; // Store the selected file
+
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                previewImage.src = e.target.result; // Set the image source
+                previewContainer.style.display = "block"; // Show the preview container
+                removeImageButton.style.display = "inline-block"; // Show the remove button
+              };
+              reader.readAsDataURL(file); // Read the file as a data URL
+            }
+
+            validateForm(); // Validate form on file selection
+          }
+
+          // Function to remove the selected image
+          function removeImage() {
+            selectedFile = null; // Clear the selected file
+            document.getElementById("preview-container").style.display = "none"; // Hide the preview container
+            document.getElementById("file-picker").value = ""; // Clear the file input
+            document.getElementById("camera-picker").value = ""; // Clear the camera input
+            document.getElementById("removeImageButton").style.display = "none"; // Hide the remove button
+
+            // Re-enable both inputs
+            document.getElementById("file-picker").disabled = false;
+            document.getElementById("camera-picker").disabled = false;
+
+            validateForm(); // Validate form after removing image
+          }
+
+          const textarea = document.getElementById("post_content");
+          const charCountDisplay = document.getElementById("charCount");
+          const submitButton = document.getElementById("submitButton");
+
+          textarea.addEventListener("input", function () {
+            const text = textarea.value;
+            const charCount = text.length;
+
+            // Update the character count display
+            charCountDisplay.textContent = `Characters: ${charCount} / 100`;
+            if (charCount > 100) {
+              charCountDisplay.style.color = "red";
+              charCountDisplay.style.fontWeight = "bold";
+            } else {
+              charCountDisplay.style.color = "darkslategrey";
+              charCountDisplay.style.fontWeight = "normal";
+            }
+            validateForm(); // Validate form on textarea input
+          });
+
+          // Function to validate the form
+          function validateForm() {
+            const isTextFilled = textarea.value.trim() !== "";
+            const isImageSelected = selectedFile !== null;
+            const charCount = textarea.value.length;
+            // Enable or disable the submit button based on validation
+            submitButton.disabled = !(isTextFilled && isImageSelected && charCount <= 100);
+          }
+
+          // Close modal function
+          const closeModal = document.querySelector(".close");
+          closeModal.addEventListener("click", function () {
+            document.getElementById("postModal").style.display = "none"; // Hide modal
+          });
+
+          // Example of how to open the modal
+          // document.getElementById('openModalButton').onclick = function() {
+          //     document.getElementById('postModal').style.display = 'block'; // Show modal
+          // };
+          function copyToClipboard(postId) {
+            // Get the hidden text field
+            var copyText = document.getElementById("textToCopy-" + postId);
+
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value);
+          }
+        </script>
+
+        <div class="whole-container">
+          <h2 style="color: red; font-size: large">{{error}}</h2>
+
+          <div class="container">
+            {% if not feed_data %}
+            <div style="text-align: center; font-size: 24px; color: red; font-weight: bold">
+              Post content or add Friends to show the content here!
+            </div>
+            {% endif %} {% for post in feed_data|reverse %}
+            <div class="post">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                "
+              >
+                <img
+                  src="{{ url_for('static', filename='img/lion.jpg') }}"
+                  alt="User Profile"
+                  class="circular-image"
+                  style="
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 2px solid #ddd;
+                  "
+                />
+
+                <!-- <div style="margin-top: 5px; font-weight: bold;">{{ post.username }} <em>{{ post.date }}</em></div>  -->
+                <div style="margin-top: 5px; font-weight: bold">
+                  <a
+                    href="{{ url_for('user_profile', username=post.username) }}"
+                    style="text-decoration: none; color: inherit"
+                    >{{ post.name }}</a
+                  >
+                  <span style="color: #4caf50"> • </span>
+                  <em style="font-weight: normal">{{ post.date }}</em>
+                </div>
+                <br />
+              </div>
+              <!-- <em>{{ post.date }}</em><br/>   {{filenames}} -->
+              <!-- <img src="https://img.freepik.com/free-photo/stunning-square-portrait-adorable-cute-cat_181624-37290.jpg" 
+                           alt="Post Image" style="object-fit: cover; border-radius: 10px;"> -->
+              <a href="{{url_for('post_info', post_id=post.post_id)}}">
+                <div class="image-container">
+                  <center>
+                    <img
+                      src="{{ url_for('static', filename=post.postimg[7:]) }}"
+                      alt="Post Image"
+                      class="post-image"
+                    />
+                  </center>
+                </div>
+              </a>
+              <div>
+                <a
+                  href="{{ url_for('user_profile', username=post.username) }}"
+                  style="text-decoration: none; color: inherit"
+                >
+                  <strong>{{ post.username }}</strong></a
+                >: {{ post.content }}
+              </div>
+              <!-- <div class="likes">100 likes</div>
+                      <div class="comments">15 comments</div> -->
+              <br />
+              <div class="interaction">
+                <!-- <button class="button">Like</button> -->
+                {% if currentuser['username']==post.username %}
+                <a
+                  href="{{url_for('edit_post', post_id=post.post_id)}}"
+                  style="text-decoration: none"
+                >
+                  <button class="button">Edit Post</button></a
+                >
+                {% endif %}
+                <textarea id="textToCopy-{{post.post_id}}" style="display: none">
+                              {{url_for('post_info', post_id=post.post_id,_external = True)}}
+                          </textarea
+                >
+                <button class="button" onclick="copyToClipboard('{{ post.post_id }}')">
+                  Share
+                </button>
+              </div>
+            </div>
+            <hr />
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="friends-sidebar">
+        <input type="text" id="searchBar" placeholder="Search friends..." />
+        <ul id="friendsList">
+          {% for user in userList %}
+          <li>
+            <!-- Name aligned left -->
+            <a href="/user/{{ user['username'] }}" class="friend-name">
+              {{ user.name }}<br />
+              <h6 style="margin-block-start: 0em; margin-block-end: 0em; font-weight: 500">
+                @{{user.username}}
+              </h6>
+            </a>
+
+            {% if user.isFollowing == 'true' %}
+            <!-- Form for removing a friend -->
+            <form action="/remove-friend-request" method="POST" class="friend-action-form">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="feed" />
+              <button type="submit" name="action" value="remove" class="unfollow-button">
+                Unfollow
+              </button>
+            </form>
+            {% else %} {% if user.user_id in sentRequests %}
+            <form action="/cancel-friend-request" class="friend-action-form" method="post">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="feed" />
+              <div style="position: relative; display: inline-block">
+                <hovbutton
+                  ><button type="submit" name="action" value="pending" class="pending-button">
+                    Pending
+                  </button></hovbutton
+                >
+                <div class="hover-text">Cancel Pending Request!</div>
+              </div>
+            </form>
+            <style></style>
+            <script>
+              const button = document.querySelector("hovbutton");
+              const hoverText = document.querySelector(".hover-text");
+
+              button.addEventListener("mouseenter", () => {
+                hoverText.style.display = "block";
+              });
+
+              button.addEventListener("mouseleave", () => {
+                hoverText.style.display = "none";
+              });
+            </script>
+
+            {% else %}
+            <!-- Form for adding a friend -->
+            <form action="/send-friend-request" method="POST" class="friend-action-form">
+              <input type="hidden" name="friendUID" value="{{ user.user_id }}" />
+              <input type="hidden" name="username" value="{{ user.username }}" />
+              <input type="hidden" name="area" value="feed" />
+              <button type="submit" name="action" value="add" class="follow-button">Follow</button>
+            </form>
+            {% endif %}{% endif %}
+          </li>
+          <hr />
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      let debounceTimer;
+      document.getElementById("searchBar").addEventListener("input", function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          const query = document.getElementById("searchBar").value.toLowerCase();
+          const friends = document.querySelectorAll("#friendsList li");
+          let hasVisible = false;
+
+          // Filter and display matching friends
+          friends.forEach((friend) => {
+            const name = friend.querySelector(".friend-name").textContent.toLowerCase();
+            const username = friend.querySelector("input[name='username']").value.toLowerCase(); // Get username from hidden input
+            if (name.includes(query) || username.includes(query)) {
+              friend.style.display = ""; // Show matching friend
+              hasVisible = true;
+            } else {
+              friend.style.display = "none"; // Hide non-matching friend
+            }
+          });
+
+          // Handle "not found" message
+          let notFoundMessage = document.getElementById("notFoundMessage");
+          if (!notFoundMessage) {
+            notFoundMessage = document.createElement("p");
+            notFoundMessage.id = "notFoundMessage";
+            notFoundMessage.textContent = "Username or name not found.";
+            notFoundMessage.style.textAlign = "center";
+            notFoundMessage.style.display = "none";
+            document.querySelector("#friendsList").appendChild(notFoundMessage);
+          }
+          notFoundMessage.style.display = hasVisible ? "none" : "block";
+
+          // Update dividers
+          updateDividers();
+        }, 300); // Adjust delay as needed (300ms)
+      });
+
+      function updateDividers() {
+        const friends = Array.from(document.querySelectorAll("#friendsList li"));
+
+        // Remove all existing <hr> elements
+        document.querySelectorAll("#friendsList hr").forEach((hr) => hr.remove());
+
+        // Add <hr> between visible friends
+        let previousVisible = null;
+        friends.forEach((friend) => {
+          if (friend.style.display !== "none") {
+            if (previousVisible) {
+              const hr = document.createElement("hr");
+              previousVisible.parentNode.insertBefore(hr, friend);
+            }
+            previousVisible = friend;
+          }
+        });
+      }
+
+      // Initial divider setup on page load
+      document.addEventListener("DOMContentLoaded", updateDividers);
+    </script>
+
+    <br /><br /><br />
+    <footer class="footer" style="z-index: 2">
+      <div class="container-x">
+        <div class="footer-content">
+          <p>&copy; 2024 AGHA T SYEDI. All rights reserved.</p>
+          <ul class="footer-links">
+            <li>
+              <a href="/about" style="text-decoration: none; color: inherit">About Us</a>
+            </li>
+            <li>
+              <a href="/privacy" style="text-decoration: none; color: inherit">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="/terms" style="text-decoration: none; color: inherit">Terms of Service</a>
+            </li>
+            <li>
+              <a href="/user/agha" style="text-decoration: none; color: inherit">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

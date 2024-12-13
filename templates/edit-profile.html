@@ -1,0 +1,135 @@
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile - Voyage</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+  <link id="common-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/day-mode-common.css') }}" />
+
+  <link id="theme-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/nfeed.css') }}" />
+
+  <style>
+  </style>
+  <script src="{{ url_for('static', filename='js/daynight-toggle.js') }}" defer></script>
+  <style>
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <a href="{{ url_for('feed') }}" style="text-decoration:none;">
+      <h1>Voyage</h1>
+    </a>
+    <a href="{{ url_for('feed') }}" class="go-home"><button>Go to Feed</button></a>
+    <div class="search-container">
+      <div class="toggle-wrapper">
+        <input type="checkbox" id="night-button" class="toggle-night" />
+        <label for="night-button" class="toggle-label">
+            <span class="toggle-icon"></span>
+        </label>
+    </div>
+      <input type="text" placeholder="Search..." aria-label="Search" id="search-input">
+      <div id="search-dropdown" class="search-dropdown">
+        <ul id="search-results"></ul>
+      </div>
+
+      <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+
+      <a href="{{ url_for('logout') }}" class="button">Logout</a>
+    </div>
+  </div>
+  <div style="margin-top: 80px"></div>
+  <div class="username-display">
+    <h1 class="username-text">{{ currentuser['name'] }}, Edit Your Profile!</h1>
+  </div>
+  <center>
+    <h2 style="color: red; font-size: large">{{ feedback }}</h2>
+  </center>
+
+  <div class="edit-profile-container">
+    <h2>Edit Profile</h2>
+    <form action="/editprofile" method="POST">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="{{currentuser['username']}}" readonly />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{currentuser['email']}}" readonly />
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" value="{{currentuser['phone']}}" required />
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="{{currentuser['name']}}" required />
+      </div>
+
+      <div class="form-group" id="password-fields"></div>
+
+      <div id="password-message" style="color: red"></div>
+
+      <button type="submit" class="submit-button" id="submit-btn">
+        Update Profile
+      </button>
+
+      <script>
+        // JavaScript to add password and confirm password fields
+        document.addEventListener("DOMContentLoaded", function () {
+          var passwordFields = document.getElementById("password-fields");
+
+          // Create Password Field
+          var passwordLabel = document.createElement("label");
+          passwordLabel.setAttribute("for", "password");
+          passwordLabel.textContent = "Password (optional)";
+
+          var passwordInput = document.createElement("input");
+          passwordInput.setAttribute("type", "password");
+          passwordInput.setAttribute("id", "password");
+          passwordInput.setAttribute("name", "password");
+
+          // Create Confirm Password Field
+          var confirmPasswordLabel = document.createElement("label");
+          confirmPasswordLabel.setAttribute("for", "confirm-password");
+          confirmPasswordLabel.textContent = "Confirm Password (optional)";
+
+          var confirmPasswordInput = document.createElement("input");
+          confirmPasswordInput.setAttribute("type", "password");
+          confirmPasswordInput.setAttribute("id", "confirm-password");
+          confirmPasswordInput.setAttribute("name", "confirm-password");
+
+          // Append fields to the form-group div
+          passwordFields.appendChild(passwordLabel);
+          passwordFields.appendChild(passwordInput);
+          passwordFields.appendChild(confirmPasswordLabel);
+          passwordFields.appendChild(confirmPasswordInput);
+
+          // Validate matching passwords
+          var submitButton = document.getElementById("submit-btn");
+          var passwordMessage = document.getElementById("password-message");
+
+          submitButton.addEventListener("click", function (event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword =
+              document.getElementById("confirm-password").value;
+
+            // Check if password fields are filled in
+            if (password !== "" || confirmPassword !== "") {
+              // If passwords don't match, show error and prevent form submission
+              if (password !== confirmPassword) {
+                event.preventDefault(); // Prevent form submission
+                passwordMessage.textContent = "Passwords do not match!";
+              } else {
+                passwordMessage.textContent = ""; // Clear message if passwords match
+              }
+            }
+          });
+        });
+      </script>
+    </form>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Posts | Admin - Voyage</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        margin: 0;
+        padding: 0;
+        color: #ffffff;
+      }
+
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      header {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        border-bottom: 2px solid #4caf50;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2.5em;
+        text-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3);
+      }
+
+      main {
+        padding: 20px;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      h2 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 10px rgba(255, 255, 255, 0.5);
+      }
+
+      #search-container {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input[type="text"],
+      select {
+        padding: 10px;
+        font-size: 1em;
+        border: 1px solid #4caf50;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: border-color 0.3s;
+      }
+
+      input[type="text"]:focus,
+      select:focus {
+        border-color: #327534;
+        outline: none;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      th,
+      td {
+        padding: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      th {
+        background-color: #4caf50;
+        color: white;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      th.sortable:hover {
+        background-color: #327534;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 5px;
+      }
+
+      .highlight {
+        background-color: yellow;
+        color: black;
+        font-weight: bold;
+      }
+
+      footer {
+        text-align: center;
+        /* Centers text horizontally */
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        position: fixed;
+        /* Use fixed positioning if you want it at the bottom of the viewport */
+        bottom: 0;
+        /* Positions the footer at the bottom of its containing block */
+        left: 50%;
+        /* Aligns the left side of the footer to the center of the viewport */
+        transform: translateX(-50%);
+        /* Offsets the footer by half its width to center it */
+        width: 90%;
+        /* Sets the width of the footer */
+        box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+      }
+
+      nav li {
+        margin: 0 15px;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #4caf50;
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: #ffffff;
+      }
+
+      .limited-width {
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+    </style>
+    <script>
+      // Function to perform live search
+      function liveSearch() {
+        const input = document.getElementById("search-input");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("post-table");
+        const rows = table.getElementsByTagName("tr");
+        const selectedColumn = document.getElementById("column-select").value;
+
+        // Clear previous highlights
+        for (let i = 1; i < rows.length; i++) {
+          const cells = rows[i].getElementsByTagName("td");
+          for (let j = 0; j < cells.length; j++) {
+            if (cells[j].querySelector("img")) {
+              const img = cells[j].querySelector("img");
+              cells[j].innerHTML = img.outerHTML;
+            } else {
+              cells[j].innerHTML = cells[j].textContent;
+            }
+          }
+        }
+
+        // Loop through all table rows and hide those that don't match the search query
+        for (let i = 1; i < rows.length; i++) {
+          const cells = rows[i].getElementsByTagName("td");
+          let match = false;
+
+          if (selectedColumn === "all") {
+            for (let j = 0; j < cells.length; j++) {
+              if (highlightText(cells[j], filter)) {
+                match = true;
+              }
+            }
+          } else {
+            const columnIndex = getColumnIndex(selectedColumn);
+            if (columnIndex !== null && cells[columnIndex]) {
+              match = highlightText(cells[columnIndex], filter);
+            }
+          }
+
+          rows[i].style.display = match ? "" : "none";
+        }
+      }
+
+      function getColumnIndex(columnName) {
+        const columns = {
+          post_id: 0,
+          username: 1,
+          name: 2,
+          date: 3,
+          content: 4,
+        };
+        return columns[columnName] !== undefined ? columns[columnName] : null;
+      }
+
+      function highlightText(cell, searchTerm) {
+        const img = cell.querySelector("img");
+        if (img) {
+          const text = cell.textContent;
+          const regex = new RegExp(`(${searchTerm})`, "gi");
+          const highlightedText = text.replace(regex, '<span class="highlight">$1</span>');
+          cell.innerHTML = img.outerHTML + highlightedText;
+          return highlightedText !== text;
+        } else {
+          const text = cell.textContent;
+          const regex = new RegExp(`(${searchTerm})`, "gi");
+          const highlightedText = text.replace(regex, '<span class="highlight">$1</span>');
+          cell.innerHTML = highlightedText;
+          return highlightedText !== text;
+        }
+      }
+
+      // Function to sort the table based on column index
+      function sortTable(columnIndex) {
+        const table = document.getElementById("post-table");
+        const rows = Array.from(table.rows).slice(1); // Exclude the header row
+        const isNumeric = !isNaN(rows[0].cells[columnIndex].textContent.trim());
+        let ascending = table.dataset.sortOrder === "asc";
+
+        rows.sort((rowA, rowB) => {
+          const cellA = rowA.cells[columnIndex].textContent.trim();
+          const cellB = rowB.cells[columnIndex].textContent.trim();
+
+          if (isNumeric) {
+            return ascending ? cellA - cellB : cellB - cellA;
+          }
+          return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
+
+        // Append sorted rows back to the table
+        rows.forEach((row) => table.tBodies[0].appendChild(row));
+
+        // Toggle sort order for next sort
+        table.dataset.sortOrder = ascending ? "desc" : "asc";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const headers = document.querySelectorAll("th.sortable");
+        headers.forEach((header, index) => {
+          if (index < 5) {
+            // Skip sorting for the "Post Image" column
+            header.addEventListener("click", () => sortTable(index));
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <h1>View Posts</h1>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('admin')}}">Admin Page</a></li>
+          <li><a href="{{ url_for('view_users')}}">View Users</a></li>
+          <li><a href="{{ url_for('view_posts')}}">View Posts</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li><a href="{{ url_for('feed')}}">Feed</a></li>
+          <li><a href="{{ url_for('logout')}}">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <h2>All Posts</h2>
+      <div id="search-container">
+        <select id="column-select" onchange="liveSearch()">
+          <option value="all">Search All Columns</option>
+          <option value="username">Username</option>
+          <option value="name">Name</option>
+          <option value="date">Date</option>
+          <option value="content">Content</option>
+          <option value="post_id">Post ID</option>
+        </select>
+        <input
+          type="text"
+          id="search-input"
+          onkeyup="liveSearch()"
+          placeholder="Type to search..."
+        />
+      </div>
+      <table id="post-table" data-sort-order="asc">
+        <thead>
+          <tr>
+            <th class="sortable">Post ID</th>
+            <th class="sortable">Username</th>
+            <th class="sortable">Name</th>
+            <th class="sortable">Date</th>
+            <th class="sortable">Content</th>
+            <th>Post Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post in posts | reverse %}
+          <tr>
+            <td>{{ post.post_id }}</td>
+            <td>{{ post.username }}</td>
+            <td>{{ post.name }}</td>
+            <td>{{ post.date }}</td>
+            <td class="limited-width">{{ post.content }}</td>
+            <td><img src="{{ post.postimg }}" alt="Post Image" /></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <footer>
+      <p>&copy; 2024 AGHA. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

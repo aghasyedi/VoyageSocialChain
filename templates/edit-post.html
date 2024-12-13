@@ -1,0 +1,87 @@
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Post - Voyage</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='v.ico') }}">
+  <link id="common-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/day-mode-common.css') }}" />
+
+  <!-- Dynamic theme stylesheet -->
+  <link id="theme-stylesheet" rel="stylesheet" href="{{ url_for('static', filename='css/nfeed.css') }}" />
+
+  <style>
+  </style>
+  <script src="{{ url_for('static', filename='js/daynight-toggle.js') }}" defer></script>
+</head>
+
+<body>
+  <div class="navbar">
+    <a href="{{ url_for('feed') }}" style="text-decoration:none;">
+      <h1>Voyage</h1>
+    </a>
+    <a href="{{ url_for('feed') }}" class="go-home"><button>Go to Feed</button></a>
+    <div class="search-container">
+      <div class="toggle-wrapper">
+        <input type="checkbox" id="night-button" class="toggle-night" />
+        <label for="night-button" class="toggle-label">
+            <span class="toggle-icon"></span>
+        </label>
+    </div>
+      <input type="text" placeholder="Search..." aria-label="Search" id="search-input">
+      <div id="search-dropdown" class="search-dropdown">
+        <ul id="search-results"></ul>
+      </div>
+
+      <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+
+      <a href="{{ url_for('logout') }}" class="button">Logout</a>
+    </div>
+  </div>
+  <div style="margin-top: 80px"></div>
+  <div class="username-display">
+    <h1 class="username-text">{{ currentuser['name'].split(' ')[0] }}, Edit Your Post!</h1>
+  </div>
+  {% if error %}
+  <center>
+    <h2 style="color: red; font-size: large">{{ error }}</h2>
+  </center>
+  {% else %}
+
+  <center>
+    <h2 style="color: red; font-size: large">{{ feedback }}</h2>
+  </center>
+
+  <div class="edit-profile-container">
+    <h2>Edit Post</h2>
+    <div class="image-container">
+      <center>
+        <img src="{{ url_for('static', filename=post.postimg[7:]) }}" alt="Post Image" class="post-image" style="max-width: 300px;max-height: 300px;">
+      </center>
+    </div>
+    <form action="/editpost" method="POST">
+      <div class="form-group" style="margin-top: 20px;">
+        <label for="postid">Post ID</label>
+        <input type="text" id="postid" name="postid" value="{{post['post_id']}}" readonly />
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="{{post['username']}}" readonly />
+      </div>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input id="date" name="date" value="{{post['date']}}" readonly />
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <input type="text" id="content" name="content" value="{{post['content']}}" required />
+      </div>
+      <button type="submit" class="submit-button" id="submit-btn">
+        Update Post Content
+      </button>
+    </form>
+  </div>
+  {% endif %}
+</body>
+
+</html>
